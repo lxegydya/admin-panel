@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Fruit{% endblock %}
+
+{% block content %}
+<!-- ======= Main Content ======= -->
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>Fruits</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/fruits">Fruits</a></li>
+                <li class="breadcrumb-item active">Edit Fruits</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+    <br>
+    <div class="card border-0 shadow mb-4 ">
+        <div class="card-body mt-4">
+            <div class="table-responsive">
+                <form action="/fruit/edit/{{ fruit._id|string }}" method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" style="border-radius: 13px;"
+                            value="{{ fruit.name }}"
+                            placeholder="Enter the fruit's name" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Price</label>
+                        <input type="number" class="form-control" id="price" name="price" style="border-radius: 13px;"
+                            value="{{ fruit.price }}"
+                            placeholder="Set the price" required />
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex flex-column gap-0">
+                            <label for="image" class="form-label">Image</label>
+                            <img id="image-preview" width="350" class="mb-2 rounded" src="{{ url_for('static', filename='/uploads/' + fruit.image ) }}"/>
+                        </div>
+                        <input type="file" class="form-control" id="image" accept=".png,.jpg,.jpeg" name="image"
+                            style="border-radius: 13px;" onchange="preview(event)" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" name="description" id="description" style="border-radius: 13px;"
+                            placeholder="Describe the fruit" required>{{ fruit.description }}</textarea>
+                    </div>
+                    <div class="d-flex flex-row-reverse">
+                        <button type="submit" class="btn btn-danger">Submit</button>
+                    </div>
+                </form>
+            </div>  
+        </div>
+    </div>
+</main>
+<!-- ======= End of Main Content ======= -->
+{% endblock %}
+
+{% block script %}
+    <script>
+        function preview(event){
+            let fr = new FileReader()
+            let file = event.target.files[0]
+
+            fr.onload = function(e) {
+                let previewContainer = document.getElementById('image-preview')
+                previewContainer.src = e.target.result
+                previewContainer.classList.remove('d-none')
+            }
+
+            fr.readAsDataURL(file)
+        }
+    </script>
+{% endblock %}
